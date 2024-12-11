@@ -1,0 +1,18 @@
+/* Normal text color */
+body {
+  color: #333333; /* Dark gray for normal text */
+}
+
+/* Heading 1 color */
+h1 {
+  color: #black; /* Blue for Heading 1 */
+}
+
+/* You can customize other headings similarly */
+h2 {
+  color: #777777;
+}
+
+h3 {
+  color: #A6BED8;
+}

@@ -1,0 +1,497 @@
+---
+title: "Eutrophication in the Oslofjord"
+subtitle: "Descriptive analysis and averages"
+description: "NIVA Denmark, Paula Ramon Ocampo"
+title-block-banner: "#E8E8E8"
+format: 
+  html:
+    embed-resources: true
+    smooth-scroll: true
+    theme: cosmo
+    fontcolor: "#222140"
+    highlight-style: haddock
+    toc: true
+    toc-title: ""
+    toc-location: left
+    toc-expand: 2
+    css: styles.css
+    output-file: "index"
+    output-ext:  "html"
+
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false 
+#| include: false
+
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(hms)
+library(terra)
+library(sf)
+library(patchwork)
+library(data.table)
+
+std.error <- function(x) sd(x)/sqrt(length(x))
+Sys.setlocale("LC_ALL", "en_US.UTF-8")
+```
+
+# Introduction
+
+This script has been used to obtain the results for the manuscript.
+
+We will start with the cleaned data ready to be assessed. The data is divided in three datasets:
+
+-   **Softbottom**, includes biodiversity indexes (H', ES100,...)
+
+-   **Hardbottom**, includes MSMDI index
+
+-   **Psycochemical**, includes nutrients, oxygen data, secchi depth data, etc
+
+```{r}
+#| eval: false
+  input_folder <- "C:/your_folder/input/"
+  output_folder <- "C:/your_folder/output/"
+
+```
+
+# Averages
+
+The averages of the different parameters are calculated by waterbody ("*Vannforeko*") and Year. Additional steps were required depending on the parameters:
+
+-   For *Softbottom fauna*, the average is calculated as the mean of all the indexes measured.
+
+    ```{r}
+    #| eval: false
+      softbottom <- read.table(paste0(input_folder, "softbottom.csv"), 
+                               sep = ";", header = T)
+      
+      avg_softbottom <- softbottom %>%
+        mutate(Value = as.numeric(Value)) %>%
+        filter(!is.na(Value)) %>%
+        group_by(Vannforeko, Vannfore_1, Salinity, Type, Year, Unit) %>%
+        summarise(Avg = mean(Value),
+                  SE = std.error(Value),
+                  N = n(),
+                  .groups = "drop") %>%
+        mutate(Parameter = "Softbottom fauna")
+    ```
+
+    ```{r}
+    #| eval: false
+    #| echo: false
+    #| warning: false
+    #| message: false 
+    #| include: false
+    #| results: "hide"
+      
+      rm(softbottom)
+      gc()
+    ```
+
+-   For *Hardbottom fauna*, the average is calculated as the mean of the MSMDI measurements.
+
+    ```{r}
+    #| eval: false
+    #| warning: false
+
+      hardbottom <- read.table(paste0(input_folder, "hardbottom.csv"), 
+                               sep = ";", header = T)
+      
+      avg_hardbottom <- hardbottom %>%
+        mutate(Value = as.numeric(Value)) %>%
+        filter(!is.na(Value)) %>%
+        group_by(Vannforeko, Vannfore_1, Salinity, Type, Year, Parameter, Unit) %>%
+        summarise(Avg = mean(Value),
+                  SE = std.error(Value),
+                  N = n(),
+                  .groups = "drop")
+    ```
+
+    ```{r}
+    #| eval: false
+    #| echo: false
+    #| warning: false
+    #| message: false 
+    #| include: false
+    #| results: "hide"
+
+      rm(hardbottom)
+      gc()
+    ```
+
+-   For *Physicochemicals*, the averaging depends on the parameter
+
+    ```{r}
+    #| eval: false
+      hydrography <- read.table(paste0(input_folder, "hydrography.csv"), 
+                                sep = ";", header = T)
+    ```
+
+    -   For ***oxygen***, it takes the lowest value at the deepest depth for each station, for every year. It is also needed to check if the observation is repeated at the same depth in other dates, sometimes is an error of the machine. Additionally, if turbidity is \>10, do not take the oxygen value, it is probably corrupted. [This is done both for oxygen ("oksygen") and oxygen saturation ("oksygenmetning")]{.underline}
+
+        ```{r}
+        #| eval: false
+          oxygen <- hydrography %>%
+            filter(Parameter %in% c("oksygen", "oksygenmetning", "turbiditet")) %>%
+            distinct(Vannforeko, Vannfore_1, Year, Month, Date, Longitude, Latitude,
+                     Depth.1, Depth.2, station_ID, Parameter, Value)
+
+        #make a column with the turbidity
+          oxygen <- oxygen %>%
+            pivot_wider(id_cols = c("Vannforeko", "Vannfore_1", "Year", "Month", "Date",
+                                    "Longitude", "Latitude", "Depth.1", "Depth.2",
+                                    "station_ID"),
+                        names_from = "Parameter", 
+                        values_from = "Value", 
+                        values_fn = ~ mean(.x)) %>%
+            arrange(Vannforeko, Vannfore_1, Year, Month, Date, Depth.1, Depth.2)
+          
+          oxygen <- oxygen %>%
+            mutate(turbiditet = ifelse(is.na(turbiditet), 0, turbiditet)) %>%
+            filter(!is.na(oksygen)) %>%
+            filter(turbiditet < 10) %>%
+            mutate(Year = factor(Year,levels = sort(unique(.$Year))))
+
+        # At least seven months of observations
+          oxygen <- oxygen %>%
+            group_by(Vannfore_1,Year) %>%
+            mutate(n_months = n_distinct(Month)) %>%
+            ungroup() %>%
+            filter(n_months >= 7) 
+
+
+        # Arranging by and taking the deepest depth per station and month.
+          oxygen <- oxygen %>%
+            group_by(Vannforeko, Vannfore_1, Year, Month, Date, Longitude, Latitude,
+                     station_ID) %>%
+            mutate(id = cur_group_id()) %>%
+            arrange(id, desc(Depth.1)) %>%
+            slice(1) %>%
+            ungroup() %>%
+            arrange(Vannforeko, Vannfore_1, Longitude, Latitude, station_ID, Year,
+                    Month, Date)
+
+        #taking the lowest value per Year and waterbody.
+          oxygen <- oxygen %>%
+            group_by(Vannforeko, Vannfore_1, Year) %>%
+            summarise(Value = min(oksygen),
+                      Avg_o = mean(oksygen), 
+                      SE = std.error(oksygen),
+                      N = n(), 
+                      .groups = "drop")
+          
+          oxygen <- oxygen %>%
+            mutate(Parameter = "oksygen",
+                   Unit = "ml/l",
+                   Year = as.numeric(as.character(Year))) %>%
+            ungroup()
+
+        ```
+
+        ```{r}
+        #| echo: false
+        #| eval: false
+          oxygen_satur <- hydrography %>%
+            filter(Parameter %in% c("oksygenmetning", "turbiditet"))
+          
+          
+          oxygen_satur <- oxygen_satur %>%
+            distinct(Vannforeko, Vannfore_1, Year, Month, Date, Longitude, Latitude,
+                     Depth.1, Depth.2, station_ID, Parameter, Value) 
+          
+          
+        # Make a column with the turbidity
+          oxygen_satur <- oxygen_satur %>%
+            pivot_wider(id_cols = c("Vannforeko", "Vannfore_1", "Year", "Month", "Date", "Longitude", "Latitude", "Depth.1", 
+                                  "Depth.2", "station_ID"),
+                        names_from = "Parameter", 
+                        values_from = "Value", 
+                        values_fn = ~ mean(.x)) %>%
+            arrange(Vannforeko, Vannfore_1, Year, Month, Date, Depth.1, Depth.2)
+          
+          oxygen_satur <- oxygen_satur %>%
+            mutate(turbiditet = ifelse(is.na(turbiditet), 0, turbiditet)) %>%
+            filter(!is.na(oksygenmetning)) %>%
+            filter(turbiditet < 10) 
+
+        # At least seven months of observations
+          oxygen_satur <- oxygen_satur %>%
+            group_by(Vannfore_1, Year) %>%
+            mutate(n_months = n_distinct(Month)) %>%
+            ungroup() %>%
+            filter(n_months >= 7) 
+          
+        # Arranging by and taking the deepest depth per station and month.
+          oxygen_satur <- oxygen_satur %>%
+            group_by(Vannforeko, Vannfore_1, Year, Month, Date, Longitude, Latitude, station_ID) %>%
+            mutate(id = cur_group_id()) %>%
+            arrange(id, desc(Depth.1)) %>%
+            slice(1) %>%
+            ungroup() %>%
+            arrange(Vannforeko, Vannfore_1, Longitude, Latitude, station_ID, Year, Month, Date)
+          
+        # Taking the lowest value per Year and station.
+          oxygen_satur <- oxygen_satur %>%
+            group_by(Vannforeko, Vannfore_1, Year) %>%
+            summarise(Value = min(oksygenmetning),
+                      Avg_o = mean(oksygenmetning),
+                      SE = std.error(oksygenmetning),
+                      N = n(),
+                      .groups = "drop")
+          
+          oxygen_satur <- oxygen_satur %>%
+            mutate(Parameter = "oksygenmetning",
+                   Unit = "%")
+
+        ```
+
+        ```{r}
+        #| echo: false
+        cat("Reminder: the Avg_o and SE are the mean and standard error for the yearly \nmeasurements for oxygen. The Value column represents the minimum value per \nvannforekomst per year.")
+        ```
+
+    -   For ***nutrients** and **chlorophyll***, only depth up to 10 m has been considered. For *nutrients* the average is calculated as the yearly mean per season. For *chlorophyll and secchi depth* only the summer season is considered.
+
+        ```{r}
+        #| eval: false
+          nutrients <- hydrography %>%
+            filter(!(Parameter %in% c("klfa","oksygen","turbiditet","oksygenmetning",
+                                      "temperatur","saltholdighet"))) %>% 
+            group_by(Vannfore_1, Parameter, Year) %>%
+            mutate(n_months = n_distinct(Month)) %>%
+            ungroup() %>%
+            filter(n_months >= 2) %>%
+            group_by(Vannforeko, Vannfore_1, Year, Parameter, Unit) %>%
+            mutate(logValue = log(0.001+Value)) %>%
+            summarise(Avg = mean(Value),
+                      SE = std.error(Value),
+                      logAvg = mean(logValue),
+                      logSE = std.error(logValue),
+                      N = n(),
+                      .groups = "drop")
+
+        ```
+
+        ```{r}
+        #| eval: false
+          chlorophyll <- hydrography %>% 
+            filter(Parameter == "klfa") %>%
+            select(Year, Month, Value, Vannforeko, Vannfore_1, 
+                   station_ID, Unit) %>%
+            mutate(Vannforeko = as.character(Vannforeko))
+          
+          chlorophyll<-chlorophyll%>%
+            filter(Month %in% c(6, 7, 8)) %>%
+            group_by(Vannforeko,Year) %>%
+            mutate(n_months = n_distinct(Month)) %>%
+            ungroup() %>%
+            filter(n_months >= 2) %>%
+            group_by(Year, Vannforeko, Vannfore_1, Unit) %>%
+            mutate(logValue = log(0.001+Value)) %>%
+            summarise(Avg = mean(Value),
+                      SE = std.error(Value),
+                      logAvg = mean(logValue),
+                      logSE = std.error(logValue),
+                      N = n(),
+                      .groups = "drop") %>%
+            mutate(Parameter = "summer klorofyll a")
+
+        ```
+
+    Then we merge the physicochemicals into one averaged dataset.
+
+    ```{r}
+    #| eval: false
+    #| message: false
+      avg_hydro <- bind_rows(nutrients, chlorophyll, oxygen, oxygen_satur) %>%
+        ungroup()
+      
+      van_type <- read_delim(paste0(input_folder, "oslofjord_waterbodies.txt"), 
+                             delim = ";", escape_double = FALSE, trim_ws = TRUE)
+      
+      
+      avg_hydro<-left_join(avg_hydro, van_type, by = c("Vannforeko", "Vannfore_1"))
+
+    ```
+
+# Thresholds
+
+The threshold used to make the assessment have been derived from the Norwegian Classification Guidance (2018) and Walday et al. (2023). They depend on the salinity and type of waterbody.
+
+To match the observations to the threshold values, we will use the "indicator" names and it will be made by datasets (avg_softbottom, avg_hardbottom, avg_hydro).
+
+```{r}
+#| echo: false 
+#| eval: false
+indicator <- data.frame(Parameter = c("MSMDI", "Softbottom fauna", "nES100", "nH'", "nISI", "nNQI1", "nNSI", "nh4-n, sommer", "nh4-n, vinter", "no3+no2-n, sommer", "no3+no2-n, vinter", "oksygen", "oksygenmetning", "po4-p, sommer", "po4-p, vinter", "siktdyp, sommer", "summer klorofyll a", "toc", "totn, sommer", "totn, vinter", "totp, sommer", "totp, vinter"), 
+                       Indicator = c("MSMDI (Nedre voksegrense) - EQR", "Softbottom fauna", "ES100","H'", "ISI2012", "NQI - EQR", "NSI", "Ammonium-nitrogen (µg N/l), sommer", "Ammonium-nitrogen (µg N/l), vinter", "Nitrat-nitrogen (µg N/l), sommer", "Nitrat-nitrogen (µg N/l), vinter", "Oksygen (ml O2/l)", "Oksygen metning (%)", "Fosfat-fosfor (µg P/l), sommer", "Fosfat-fosfor (µg P/l), vinter", "Siktdyp (m), sommer", "summer klorofyll a", "TOC", "Total nitrogen (µg N/l), sommer", "Total nitrogen (µg N/l), vinter", "Total fosfor (µg P/l), sommer", "Total fosfor (µg P/l), vinter"))
+```
+
+```{r}
+#| eval: false
+  th_softbottom <- avg_softbottom %>%
+    left_join(indicator, by = "Parameter") %>%
+    filter(!is.na(Indicator)) %>%
+    mutate(MatchValue = "Alle",
+           Match = NA_character_,
+           MatchValue = ifelse(Indicator == "H'",NA_character_,
+                             ifelse(Indicator == "NQI - EQR",
+                                    NA_character_, MatchValue))) %>%
+    filter(!is.na(Avg))
+```
+
+```{r}
+#| eval: false
+  th_hardbottom <- avg_hardbottom %>%
+    mutate(Indicator = "MSMDI (Nedre voksegrense) - EQR",
+           Match = NA_character_,
+           MatchValue = NA_character_) %>%
+    filter(!is.na(Avg))
+```
+
+```{r}
+#| eval: false
+  th_hydro <- avg_hydro %>%
+    left_join(indicator, by = "Parameter") %>%
+    filter(!is.na(Indicator)) %>%
+    mutate(MatchValue = 
+             ifelse(Salinity %in% c("Skagerak (> 25)", "Polyhalin (18 - 30)", 
+                                    "Euhalin (> 30)"), ">18",
+                               ifelse(Salinity %in% c("Skagerak (5 - 25)"), "18",
+                                     ifelse(Salinity %in% c("Mesohalin (5 - 18)"), "5", NA
+                                            )))) %>%
+    mutate(Match = "SalinityClass",
+           MatchValue = ifelse(Parameter == "summer klorofyll a", Type, MatchValue),
+           Match = ifelse(Parameter == "summer klorofyll a", "type", Match))
+```
+
+Now the data can be joined together and the threshold can be added
+
+```{r}
+#| eval: false
+thresholds <- read.table(paste0(input_folder, "thresholds.csv"), sep = ";", header = T)
+```
+
+```{r}
+#| eval: false
+  data <- bind_rows(th_softbottom, th_hardbottom, th_hydro)
+  
+  
+  data_with_thresholds <- data %>%
+    left_join(thresholds, by = c("Indicator"="Indikator","Match","MatchValue")) %>%
+    mutate(Resp = ifelse(HG > GM, -1, 1))%>%
+    rename("value" = "Value")
+```
+
+There are some values that have no threshold:
+
+-   "Oksygenmetning" for salinity 18 or 5, there is no threshold established for this case. There is only a threshold for salinity \>18.
+
+-   "Oksygen" for salinity 18 or 5, there is no threshold established for this case. There is only a threshold for salinity \>18.
+
+-   "nh4-n" (summer and winter) for salinity 18 or 5, there is no threshold established for this case. There is only a threshold for salinity \>18.
+
+-   "klfa" needs the Type of water to establish a threshold, there are no threshold for the vannforekomst that have no "Type". Additionally, for the Type "S5" there are no threshold values.
+
+```{r}
+#| eval: false
+# Filter out the measurements that do not have thresholds.
+data_with_thresholds <- data_with_thresholds %>%
+  filter(!is.na(HG)) 
+
+# De-log the observations where needed
+data_with_thresholds <- data_with_thresholds %>%
+  mutate(Avg = case_when(
+  Parameter %in% c("oksygen","oksygenmetning") ~ value,
+  Parameter %in% c("siktdyp, sommer", "nES100", "nH'", "nISI", "nNQI1", "nNSI", 
+                   "MSMDI", "Softbottom fauna" ) ~ Avg,
+  TRUE ~ exp(logAvg)-0.001)) %>%
+  select(-value)
+
+```
+
+# Analysis
+
+Now that the data is ready ("data_with_thresholds"), HEAT functions will be applied to obtain the eutrophication status and EQR values of the Oslofjord.
+
+```{r}
+#| eval: false
+source(paste0(input_folder, "../EQR_functions.R"))
+```
+
+```{r}
+#| eval: false
+#| echo: false
+#| warning: false
+#| message: false 
+#| include: false
+#| results: "hide"
+
+  shp <- sf::st_read(paste0(input_folder, "gis/oslofjord_waterbodies.shp")) 
+  shp$geometry <- NULL
+  
+  pts_coords <- shp %>%
+    select(Vannforeko, A_group, Vannfore_1, x_m, y_m)%>%
+    mutate(vfk = paste0(Vannfore_1, " [", Vannforeko, "]")) %>%
+    arrange(A_group, desc(y_m), desc(x_m))
+```
+
+```{r}
+#| eval: false
+# Calculate EQR values and status class
+  df <- data_with_thresholds %>%
+    rename("value"="Avg")
+  
+  df <- df %>%
+    CalcEQR()
+
+# Get quality element names
+  df <- df %>%
+    GetQEs()
+  
+  df<-df%>%
+    mutate(HEATCat = ifelse(Parameter == "summer klorofyll a", "Pri", HEATCat),
+           HEATCat = ifelse(Parameter == "Softbottom fauna", "Sec", HEATCat)) %>%
+    mutate(QE = ifelse(Parameter == "summer klorofyll a", "Phytoplankton", QE),
+           QE = ifelse(Parameter == "Softbottom fauna", "Bundfauna", QE)) %>%
+    mutate(QEtype = ifelse(Parameter == "summer klorofyll a", "Bio", QEtype),
+           QEtype = ifelse(Parameter == "Softbottom fauna", "Bio", QEtype)) %>%
+    left_join(pts_coords, by = c("Vannforeko", "Vannfore_1"))
+  
+  
+  df <- df %>%
+    filter(!is.na(A_group))
+  
+  df <- df %>%
+    CalcER()
+  
+  df1 <-df %>%
+    mutate(ER=EQR)
+```
+
+Then the aggregation method will vary depending on the desired level. It can be:
+
+```{r}
+#| eval: false
+dfHEAT <- aggregateHEAT(df1, var_cat = "HEATCat", group_vars = c("A_group", "Year"))
+```
+
+![Figure 1: Eutrophication status aggregated in a yearly level by basin.](images/heatmap%20HEAT%20basins.png){fig-align="center" width="326"}
+
+or
+
+```{r}
+#| eval: false
+dfHEAT <- aggregateHEAT(df1, var_cat = "HEATCat", group_vars = c("A_group", "Year", 
+                                                            "Parameter"))
+  
+```
+
+![Figure 2: Eutrophication status aggregated in a yearly level by parameter and basin.](images/Heatmap%20basin%201.png){fig-align="center"}
+
+Depending on the visualization or desired analysis, the aggregation changes. The methods followed to create the figures in the report can be found in "**data visualization.R**" and in "**data visualization - annex.R**" R scripts.
