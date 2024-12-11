@@ -1,0 +1,62 @@
+"Region";"Kvalitetselement";"Indikator";"Code";"Match";"MatchValue";"NotUsed";"Ref";"HG";"GM";"MP";"PB";"Worst"
+"S";"Planteplankton";"Klorofyll a";"Chl";"type";"S1";NA;2.3;3.5;7;11;20;NA
+"S";"Planteplankton";"Klorofyll a";"Chl";"type";"S2";NA;2;3;6;9;18;NA
+"S";"Planteplankton";"Klorofyll a";"Chl";"type";"S3";NA;2;3;6;9;18;NA
+"G";"Planteplankton";"Klorofyll a";"Chl";"type";"G1";NA;2;3;6;8;14;NA
+"G";"Planteplankton";"Klorofyll a";"Chl";"type";"G2";NA;1.7;2.5;5;8;16;NA
+"G";"Planteplankton";"Klorofyll a";"Chl";"type";"G3";NA;1.7;2.5;5;8;16;NA
+"G";"Planteplankton";"Klorofyll a";"Chl";"type";"G4";NA;2;2.6;4;6;12;NA
+"H";"Planteplankton";"Klorofyll a";"Chl";"type";"H1";NA;2;3;6;8;14;NA
+"H";"Planteplankton";"Klorofyll a";"Chl";"type";"H2";NA;1.7;2.5;5;8;16;NA
+"H";"Planteplankton";"Klorofyll a";"Chl";"type";"H3";NA;1.7;2.5;5;8;16;NA
+"H";"Planteplankton";"Klorofyll a";"Chl";"type";"H4";NA;2;2.6;4;6;12;NA
+"M";"Planteplankton";"Klorofyll a";"Chl";"type";"M1";NA;2;3;6;8;14;NA
+"M";"Planteplankton";"Klorofyll a";"Chl";"type";"M2";NA;1.7;2.5;5;8;16;NA
+"M";"Planteplankton";"Klorofyll a";"Chl";"type";"M3";NA;1.7;2.5;5;8;16;NA
+"M";"Planteplankton";"Klorofyll a";"Chl";"type";"M4";NA;2;2.6;4;6;12;NA
+"N";"Planteplankton";"Klorofyll a";"Chl";"type";"N1";NA;2;3;6;8;14;NA
+"N";"Planteplankton";"Klorofyll a";"Chl";"type";"N2";NA;1.7;2.5;5;8;16;NA
+"N";"Planteplankton";"Klorofyll a";"Chl";"type";"N3";NA;1.7;2.5;5;8;16;NA
+"N";"Planteplankton";"Klorofyll a";"Chl";"type";"N4";NA;2;2.6;4;6;12;NA
+"B";"Planteplankton";"Klorofyll a";"Chl";"type";"B1";NA;1.9;2.8;5.5;8;12;NA
+"B";"Planteplankton";"Klorofyll a";"Chl";"type";"B3";NA;1;1.5;3;6;10;NA
+"B";"Planteplankton";"Klorofyll a";"Chl";"type";"B4";NA;0.9;1.2;2;3;6;NA
+"";"Planteplankton";"Klorofyll a - EQR";"ChlEQR";NA;NA;NA;1;0.8;0.6;0.4;0.2;0
+"";"Makroalger";"MSMDI (Nedre voksegrense) - EQR";"MSMDI";NA;NA;NA;1;0.8;0.6;0.4;0.2;0
+"";"Bløtfunnsfauna";"NQI - EQR";"NQI1";NA;NA;NA;1;0.8;0.6;0.4;0.2;0
+"";"Bløtfunnsfauna";"H'";"H";NA;NA;NA;1;0.8;0.6;0.4;0.2;0
+"";"Fysisk-kjemiske";"Total fosfor (µg P/l), sommer";"TP_summer";"SalinityClass";">18";NA;NA;11.5;16;29;60;NA
+"";"Fysisk-kjemiske";"Total fosfor (µg P/l), sommer";"TP_summer";"SalinityClass";"5";NA;NA;8;12;22;53;NA
+"";"Fysisk-kjemiske";"Total fosfor (µg P/l), sommer";"TP_summer";"SalinityClass";"18";NA;NA;11.5;15.5;28;59;NA
+"";"Fysisk-kjemiske";"Fosfat-fosfor (µg P/l), sommer";"PO4_summer";"SalinityClass";">18";NA;NA;3.5;7;16;50;NA
+"";"Fysisk-kjemiske";"Fosfat-fosfor (µg P/l), sommer";"PO4_summer";"SalinityClass";"5";NA;NA;2;3.5;7.5;21;NA
+"";"Fysisk-kjemiske";"Fosfat-fosfor (µg P/l), sommer";"PO4_summer";"SalinityClass";"18";NA;NA;3.5;6.5;15;46;NA
+"";"Fysisk-kjemiske";"Total nitrogen (µg N/l), sommer";"TN_summer";"SalinityClass";">18";NA;NA;250;330;500;800;NA
+"";"Fysisk-kjemiske";"Total nitrogen (µg N/l), sommer";"TN_summer";"SalinityClass";"5";NA;NA;250;383;538;800;NA
+"";"Fysisk-kjemiske";"Total nitrogen (µg N/l), sommer";"TN_summer";"SalinityClass";"18";NA;NA;250;337;505;800;NA
+"";"Fysisk-kjemiske";"Nitrat-nitrogen (µg N/l), sommer";"NO3_summer";"SalinityClass";">18";NA;NA;12;23;65;250;NA
+"";"Fysisk-kjemiske";"Nitrat-nitrogen (µg N/l), sommer";"NO3_summer";"SalinityClass";"5";NA;NA;97;156;223;363;NA
+"";"Fysisk-kjemiske";"Nitrat-nitrogen (µg N/l), sommer";"NO3_summer";"SalinityClass";"18";NA;NA;24;41;86;265;NA
+"";"Fysisk-kjemiske";"Ammonium-nitrogen (µg N/l), sommer";"NH4_summer";"SalinityClass";">18";NA;NA;19;50;200;325;NA
+"";"Fysisk-kjemiske";"Siktdyp (m), sommer";"Secchi";"SalinityClass";">18";NA;NA;7.5;6;4.5;2.5;NA
+"";"Fysisk-kjemiske";"Siktdyp (m), sommer";"Secchi";"SalinityClass";"5";NA;NA;7;4.5;2.5;1.5;NA
+"";"Fysisk-kjemiske";"Siktdyp (m), sommer";"Secchi";"SalinityClass";"18";NA;NA;7.5;6;4;2.5;NA
+"";"Fysisk-kjemiske";"Total fosfor (µg P/l), vinter";"TP_winter";"SalinityClass";">18";NA;NA;20;25;42;60;NA
+"";"Fysisk-kjemiske";"Total fosfor (µg P/l), vinter";"TP_winter";"SalinityClass";"5";NA;NA;10.5;14.5;26;53;NA
+"";"Fysisk-kjemiske";"Total fosfor (µg P/l), vinter";"TP_winter";"SalinityClass";"18";NA;NA;20;24;40;59;NA
+"";"Fysisk-kjemiske";"Fosfat-fosfor (µg P/l), vinter";"PO4_winter";"SalinityClass";">18";NA;NA;14.5;21;34;50;NA
+"";"Fysisk-kjemiske";"Fosfat-fosfor (µg P/l), vinter";"PO4_winter";"SalinityClass";"5";NA;NA;7;9;16;31;NA
+"";"Fysisk-kjemiske";"Fosfat-fosfor (µg P/l), vinter";"PO4_winter";"SalinityClass";"18";NA;NA;14.5;19;32;48;NA
+"";"Fysisk-kjemiske";"Total nitrogen (µg N/l), vinter";"TN_winter";"SalinityClass";">18";NA;NA;291;380;560;800;NA
+"";"Fysisk-kjemiske";"Total nitrogen (µg N/l), vinter";"TN_winter";"SalinityClass";"5";NA;NA;261;385;553;800;NA
+"";"Fysisk-kjemiske";"Total nitrogen (µg N/l), vinter";"TN_winter";"SalinityClass";"18";NA;NA;291;398;559;800;NA
+"";"Fysisk-kjemiske";"Nitrat-nitrogen (µg N/l), vinter";"NO3_winter";"SalinityClass";">18";NA;NA;97;125;225;350;NA
+"";"Fysisk-kjemiske";"Nitrat-nitrogen (µg N/l), vinter";"NO3_winter";"SalinityClass";"5";NA;NA;143;226;326;478;NA
+"";"Fysisk-kjemiske";"Nitrat-nitrogen (µg N/l), vinter";"NO3_winter";"SalinityClass";"18";NA;NA;97;139;239;367;NA
+"";"Fysisk-kjemiske";"Ammonium-nitrogen (µg N/l), vinter";"NH4_winter";"SalinityClass";">18";NA;NA;33;75;155;325;NA
+"";"Fysisk-kjemiske";"Oksygen (ml O2/l)";"DO_bot";"SalinityClass";">18";NA;NA;4.5;3.5;2.5;1.5;NA
+"";"Fysisk-kjemiske";"Oksygen metning (%)";"";"SalinityClass";">18";NA;NA;65;50;35;20;NA
+"S";"Planteplankton";"summer klorofyll a";"Chl_Summer";"type";"S1";NA;0.99;1.25;1.57;3.19;5.5;NA
+"S";"Planteplankton";"summer klorofyll a";"Chl_Summer";"type";"S2";NA;1.15;1.51;1.85;3.29;6.05;NA
+"S";"Planteplankton";"summer klorofyll a";"Chl_Summer";"type";"S3";NA;1.37;1.73;2.4;4.03;5.96;NA
+NA;"Bløtfunnsfauna";"Softbottom fauna";"Bundfauna";NA;"Alle";NA;1;0.8;0.6;0.4;0.2;0
