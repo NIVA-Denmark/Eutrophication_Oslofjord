@@ -58,7 +58,6 @@ We will start with the cleaned data ready to be assessed. The data is divided in
 #| eval: false
   input_folder <- "C:/your_folder/input/"
   output_folder <- "C:/your_folder/output/"
-
 ```
 
 # Averages
