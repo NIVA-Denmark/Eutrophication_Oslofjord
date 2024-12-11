@@ -39,6 +39,7 @@ library(data.table)
 std.error <- function(x) sd(x)/sqrt(length(x))
 Sys.setlocale("LC_ALL", "en_US.UTF-8")
 ```
+[GitHub source](https://github.com/NIVA-Denmark/Eutrophication_Oslofjord)
 
 # Introduction
 
