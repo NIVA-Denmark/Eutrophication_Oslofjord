@@ -8,8 +8,9 @@ library(patchwork)
 library(data.table)
 library(extrafont)
 library(extrafontdb)
+data_with_thresholds <- readRDS("C:/Data/Repositories/230195 - Oslofjord modelling/paper 4th draft/input/assessment_data.rds")
   
-  output_folder <- "C:/your_folder/output/"
+output_folder <- "C:/your_folder/output/"
   input_folder <- "C:/your_folder/input/"
   data <- data_with_thresholds
   
@@ -218,7 +219,7 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(title =paste0(bas),y="EQR",x="Year")+
+    labs(title =paste0(bas),y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yrx, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmeanx, aes(x=Year, y=ER),shape=1)+
@@ -252,7 +253,7 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(title =paste0(bas),y="EQR",x="Year")+
+    labs(title =paste0(bas),y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yrx, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmeanx, aes(x=Year, y=ER),shape=1)+
@@ -286,7 +287,7 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(title =paste0(bas),y="EQR",x="Year")+
+    labs(title =paste0(bas),y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yrx, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmeanx, aes(x=Year, y=ER),shape=1)+
@@ -321,7 +322,7 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(title =paste0(bas),y="EQR",x="Year")+
+    labs(title =paste0(bas),y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yrx, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmeanx, aes(x=Year, y=ER),shape=1)+
@@ -356,7 +357,7 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(title =paste0(bas),y="EQR",x="Year")+
+    labs(title =paste0(bas),y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yrx, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmeanx, aes(x=Year, y=ER),shape=1)+
@@ -390,7 +391,7 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(title =paste0(bas),y="EQR",x="Year")+
+    labs(title =paste0(bas),y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yrx, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmeanx, aes(x=Year, y=ER),shape=1)+
@@ -418,7 +419,7 @@ library(extrafontdb)
   42#
   536
   "
-  p<-p1+p2+p3+p4+p5+p6+plot_layout(design = layout,guides = "collect")+plot_annotation(theme = theme(
+  p<-p1+p2+p3+p4+p5+p6+plot_layout(design = layout,guides = "collect",axis_titles = "collect")+plot_annotation(theme = theme(
     axis.title.x = element_text(margin = margin(t = 1), vjust = 0),  # Add margin to x-axis title
     axis.title.y = element_text(margin = margin(r = 1)),
     panel.border = element_rect(colour = "grey",fill=NA),
@@ -426,7 +427,9 @@ library(extrafontdb)
   )
   )
   
-  ggsave(p, file=paste0(output_folder,"integrated_HEAT_basins.png"), height=30, width=40, units="cm")
+  png(paste0(output_folder,"integrated_HEAT_basins.png"), width = 40, height = 30, units="cm",res=300)
+  p
+  dev.off()
   
   p<-ggplot(dfHEATsim_avgx) + 
     geom_rect(aes(ymin = 0.8, ymax = Inf,xmin = -Inf, xmax = Inf), fill="#2C96F6",color=NA, alpha = 0.2) +
@@ -434,11 +437,11 @@ library(extrafontdb)
     geom_rect(aes(ymin = 0.4, ymax = 0.6, xmin = -Inf, xmax = Inf), fill = "#FFFF00",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = 0.2, ymax = 0.4, xmin = -Inf, xmax = Inf), fill = "#FAB70E",color=NA, alpha = 0.2) +
     geom_rect(aes(ymin = -Inf, ymax = 0.2, xmin = -Inf, xmax = Inf), fill = "#FF2121",color=NA, alpha = 0.2) +
-    labs(y="EQR",x="Year")+
+    labs(y="Eutrophication quality ratio, EQR",x="Year")+
     geom_ribbon(aes(x=Year, ymin=ERmin, ymax=ERmax), alpha=0.2) +
     geom_line(data=dfHEATmean5yr, aes(x=Year, y=ERmean), colour="black") +
     geom_point(data=dfHEATmean, aes(x=Year, y=ER),shape=1)+
-    facet_wrap(~Basin_name,nrow=2,scales="fixed")+
+    facet_wrap(~Basin_name,ncol=2,scales="fixed")+
     scale_y_continuous(breaks= c(0,0.2,0.4,0.6,0.8,1))+
     scale_x_continuous(limits = c(1960,2025),
                        labels= c("1960","1980","2000","2020"),
@@ -453,13 +456,15 @@ library(extrafontdb)
       text = element_text(size=20,family = "Calibri"),
       plot.title = element_text(hjust = 0.5),
       axis.title.x = element_text(margin = margin(t = 8), vjust = 1),  # Add margin to x-axis title
-      axis.title.y = element_text(margin = margin(r = -8)),
+      axis.title.y = element_text(margin = margin(r = 2)),
       axis.text = element_text(size=24),
       axis.ticks.x = element_line(),
       strip.text = element_text(size=20),
       strip.background = element_rect(colour = NA,linewidth = 6))
-  ggsave(p, file=paste0(output_folder,"integrated_HEAT_basins_x.png"), height=25, width=40, units="cm")
-
+  
+  png(paste0(output_folder,"integrated_HEAT_basins_x.png"), width = 40, height = 30, units="cm",res=300)
+  p
+  dev.off()
   
 # Fig 4 - Heatmap by basins ----
  
