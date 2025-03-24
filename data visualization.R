@@ -8,8 +8,7 @@ library(patchwork)
 library(data.table)
 library(extrafont)
 library(extrafontdb)
-data_with_thresholds <- readRDS("C:/Data/Repositories/230195 - Oslofjord modelling/paper 4th draft/input/assessment_data.rds")
-  
+
 output_folder <- "C:/your_folder/output/"
   input_folder <- "C:/your_folder/input/"
   data <- data_with_thresholds
